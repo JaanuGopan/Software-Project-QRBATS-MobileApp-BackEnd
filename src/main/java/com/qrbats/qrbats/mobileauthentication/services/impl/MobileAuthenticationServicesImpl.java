@@ -4,18 +4,25 @@ import com.qrbats.qrbats.mobileauthentication.dto.StudentJwtAuthenticationRespon
 import com.qrbats.qrbats.mobileauthentication.dto.StudentRefreshTokenRequest;
 import com.qrbats.qrbats.mobileauthentication.dto.StudentSignUpRequest;
 import com.qrbats.qrbats.mobileauthentication.dto.StudentSigninRequest;
+import com.qrbats.qrbats.mobileauthentication.entities.otp.OTP;
+import com.qrbats.qrbats.mobileauthentication.entities.otp.otpverification.dto.OTPRequest;
+import com.qrbats.qrbats.mobileauthentication.entities.otp.repository.OTPRepository;
 import com.qrbats.qrbats.mobileauthentication.entities.student.Student;
 import com.qrbats.qrbats.mobileauthentication.entities.student.StudentRole;
 import com.qrbats.qrbats.mobileauthentication.entities.student.repository.StudentRepository;
 import com.qrbats.qrbats.mobileauthentication.services.JWTService;
 import com.qrbats.qrbats.mobileauthentication.services.MobileAuthenticationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -27,6 +34,7 @@ public class MobileAuthenticationServicesImpl implements MobileAuthenticationSer
 
     private final AuthenticationManager authenticationManager;
     private final JWTService jwtService;
+    private final OTPRepository otpRepository;
     @Override
     public Student signup(StudentSignUpRequest studentSignUpRequest) {
         if(!checkStudentIsExist(studentSignUpRequest.getStudentEmail())){
@@ -109,4 +117,8 @@ public class MobileAuthenticationServicesImpl implements MobileAuthenticationSer
         }
         return null;
     }
+
+
+
+
 }

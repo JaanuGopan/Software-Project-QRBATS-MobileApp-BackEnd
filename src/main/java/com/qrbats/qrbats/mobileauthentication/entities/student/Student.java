@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Data // lombok Data to add setters and getters and more automatically (reduce the boilerplate)
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -47,6 +47,7 @@ public class Student implements UserDetails {
     private Integer departmentId;
 
     private StudentRole studentRole;
+
 
 
     @Override
