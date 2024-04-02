@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -88,9 +89,18 @@ public class MobileAuthenticationServicesImpl implements MobileAuthenticationSer
                 studentSigninRequest.getStudentUserName()).orElseThrow(
                 () -> new IllegalArgumentException("Invalid userName or password")
         );
-        System.out.println(student);
 
-        var jwt = jwtService.generateToken(student);
+        Map<String, Object> extraClaims = new HashMap<>();
+
+        extraClaims.put("studentName",student.getStudentName());
+        extraClaims.put("studentId",student.getStudentId());
+        extraClaims.put("indexNumber",student.getIndexNumber());
+        extraClaims.put("studentEmail", student.getStudentEmail());
+        extraClaims.put("currentSemester",student.getCurrentSemester());
+        extraClaims.put("departmentId",student.getDepartmentId());
+        extraClaims.put("studentRole",student.getStudentRole());
+
+        var jwt = jwtService.generateToken(student,extraClaims);
         var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), student);
 
         StudentJwtAuthenticationResponse jwtAuthenticationResponse = new StudentJwtAuthenticationResponse();
@@ -106,7 +116,18 @@ public class MobileAuthenticationServicesImpl implements MobileAuthenticationSer
         Student student = studentRepository.findByUserName(userName).orElseThrow();
 
         if(jwtService.isTokenValid(refreshTokenRequest.getToken(),student)){
-            var jwt = jwtService.generateToken(student);
+
+            Map<String, Object> extraClaims = new HashMap<>();
+
+            extraClaims.put("studentName",student.getStudentName());
+            extraClaims.put("studentId",student.getStudentId());
+            extraClaims.put("indexNumber",student.getIndexNumber());
+            extraClaims.put("studentEmail", student.getStudentEmail());
+            extraClaims.put("currentSemester",student.getCurrentSemester());
+            extraClaims.put("departmentId",student.getDepartmentId());
+            extraClaims.put("studentRole",student.getStudentRole());
+
+            var jwt = jwtService.generateToken(student,extraClaims);
 
             StudentJwtAuthenticationResponse jwtAuthenticationResponse = new StudentJwtAuthenticationResponse();
 

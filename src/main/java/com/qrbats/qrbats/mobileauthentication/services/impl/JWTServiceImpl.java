@@ -17,8 +17,10 @@ import java.util.function.Function;
 @Service
 public class JWTServiceImpl implements JWTService {
 
-    public String generateToken(UserDetails userDetails){
-        return Jwts.builder().setSubject(userDetails.getUsername())
+    public String generateToken(UserDetails userDetails, Map<String, Object> extraClaims){
+        return Jwts.builder()
+                .setSubject(userDetails.getUsername())
+                .setClaims(extraClaims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24 ))
                 .signWith(getSignatureKey(), SignatureAlgorithm.HS256)
